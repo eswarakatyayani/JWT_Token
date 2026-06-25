@@ -9,6 +9,36 @@ Header
 Payload
 Signature
 Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz
+**Header:**
+The Header contains metadata about the token.
+Meaning
+alg → Algorithm used to sign the token (HS256, RS256, ES256, etc.)
+typ → Token type (JWT)
+**Payload:**
+The Payload contains the claims (information about the user).
+
+| Claim | Meaning           |
+| ----- | ----------------- |
+| `sub` | Subject (User ID) |
+| `iss` | Issuer            |
+| `aud` | Audience          |
+| `exp` | Expiration Time   |
+| `iat` | Issued At         |
+| `nbf` | Not Before        |
+| `jti` | JWT ID            |
+
+Important: The payload is not encrypted by default. It is only Base64URL encoded, so anyone can decode it. Never store sensitive information like passwords or OTPs in the payload.
+
+**Signature:**
+
+Signature =
+HMACSHA256(
+Header.Payload,
+"MySecretKey"
+)
+
+The Signature ensures that the JWT has not been modified. **If anyone changes even one character in the Header or Payload, the signature changes, and verification fails.**
+During authentication, the server verifies the signature to ensure the token hasn't been tampered with.
 
 **3) Difference Between Validating and Verifying a JWT ?**
 
