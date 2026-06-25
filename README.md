@@ -70,3 +70,14 @@ Access Granted
 
 Even if the user logs out after 5 minutes, the JWT is still technically valid for the remaining 55 minutes. A blacklist solves this problem.
 So, Token blacklisting is a JWT revocation mechanism. Each JWT contains a unique jti (JWT ID) claim. The jti is stored in a blacklist (commonly Redis) with a TTL equal to the token's remaining lifetime. When a user logs-out or when a token must be revoked,  So every request, after validating the JWT signature and expiration, the application checks whether the jti exists in the blacklist. If it does, the token is rejected even though it has not yet expired. Once the token's original expiration time is reached, the Redis entry expires automatically because of the configured TTL.
+
+**6) Where can you store a JWT token on the client side, and what are the trade-offs?**
+
+There are three client-side options and one server-side option:
+**localStorage** is persistent browser storage written to disk. Any JavaScript on the page can read it via localStorage.getItem(), which makes it vulnerable to XSS attacks — if an attacker injects a script, they can steal the token instantly. It survives page refresh and tab close.
+
+**httpOnly cookie** is also written to disk, but the browser automatically blocks JavaScript from reading it — only the server can access it. This makes it XSS-safe, but it's vulnerable to CSRF attacks (a malicious site can trick the browser into sending the cookie automatically). You mitigate CSRF with a SameSite=Strict or SameSite=Lax flag.
+
+**In-memory (client-side)** means storing the token in a plain JavaScript variable — a let token = ... in your app. No script outside your own module can reach it, making it XSS-safe. But it's gone the moment the user refreshes the page, so you typically pair it with a httpOnly refresh token cookie to silently get a new access token on reload.
+
+**Server-side in-memory** is what we use in our codebase. The token never reaches the browser at all — it lives as a module-level variable in the Node.js process memory on the server. The browser calls our Next.js API route, and that route internally fetches and uses the token. There is no client-side storage involved whatsoever. The only attack surface is the server process itself.
