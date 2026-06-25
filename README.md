@@ -81,3 +81,10 @@ There are three client-side options and one server-side option:
 **In-memory (client-side)** means storing the token in a plain JavaScript variable — a let token = ... in your app. No script outside your own module can reach it, making it XSS-safe. But it's gone the moment the user refreshes the page, so you typically pair it with a httpOnly refresh token cookie to silently get a new access token on reload.
 
 **Server-side in-memory** is what we use in our codebase. The token never reaches the browser at all — it lives as a module-level variable in the Node.js process memory on the server. The browser calls our Next.js API route, and that route internally fetches and uses the token. There is no client-side storage involved whatsoever. The only attack surface is the server process itself.
+
+**#OAuth 2.0 — Authorization framework**
+
+OAuth solves one problem: "How can I let a third-party app access my data without giving it my password?"
+When you click "Login with Google" on some app, OAuth is what happens behind the scenes. Your app redirects you to Google's login page. You log in and click "Allow". Google sends back a short-lived one-time auth code to your app. Your app then exchanges that code (plus its own client secret) with Google's server to get an access token. That access token is what the app uses to call Google APIs on your behalf — like reading your calendar or profile.
+The critical thing: OAuth's access token only says "this app is allowed to do X." It does not tell the app who you are.
+
