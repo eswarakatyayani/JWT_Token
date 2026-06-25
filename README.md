@@ -1,16 +1,16 @@
 # JWT_Token
 
-1) What is JSON Web Token?
-   JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.
+**1)** **What is JSON Web Token?**
+JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.
 
-2) What is the JSON Web Token structure?
+**2) What is the JSON Web Token structure?**
 In its compact form, JSON Web Tokens consist of three parts separated by dots (.), which are:
 Header
 Payload
 Signature
 Therefore, a JWT typically looks like the following: xxxxx.yyyyy.zzzzz
 
-4) Difference Between Validating and Verifying a JWT ?
+**3) Difference Between Validating and Verifying a JWT ?**
 
 JWT validation generally refers to checking the structure, format, and content of the JWT:
 
@@ -24,10 +24,10 @@ Signature Verification: This is the primary aspect of verification where the sig
 Issuer Verification: Checking if the iss claim matches an expected issuer.
 Audience Check: Ensuring the aud claim matches the expected audience.
 
-5) How do you invalidate a JWT token?
+**4) How do you invalidate a JWT token?**
 A JWT is invalidated when the application no longer wants to honor the permissions or identity represented by that token. Common reasons include logout, password changes, account deactivation, and permission updates. Since JWTs are stateless, invalidation is typically achieved using token revocation lists (Token blacklisting), token versioning, short expiration times, etc...
 
-6) What is Token Blacklisting?
+**5) What is Token Blacklisting?**
 Token blacklisting is a way to revoke a JWT before its expiration time.
 General Steps:
 User Login
